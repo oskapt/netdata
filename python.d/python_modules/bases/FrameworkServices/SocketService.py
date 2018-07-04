@@ -157,7 +157,7 @@ class SocketService(SimpleService):
 
         if self._sock is not None:
             self._sock.setblocking(0)
-            self._sock.settimeout(5)
+            self._sock.settimeout(self.timeout)
             self.debug('set socket timeout to: {0}'.format(self._sock.gettimeout()))
 
     def _disconnect(self):

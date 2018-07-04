@@ -18,6 +18,7 @@ from bases.FrameworkServices.SimpleService import SimpleService
 class SocketService(SimpleService):
     def __init__(self, configuration=None, name=None):
         self._sock = None
+        self.timeout = configuration.get('timeout', 5)
         self._keep_alive = False
         self.host = 'localhost'
         self.port = None
@@ -83,8 +84,9 @@ class SocketService(SimpleService):
 
         try:
             self.debug('connecting socket to "{address}", port {port}'.format(address=sa[0], port=sa[1]))
+            self._sock.settimeout(self.timeout)
             self._sock.connect(sa)
-        except (socket.error, ssl.SSLError) as error:
+        except (socket.error, timeout, ssl.SSLError) as error:
             self.error('Failed to connect to "{address}", port {port}, error: {error}'.format(address=sa[0],
                                                                                               port=sa[1],
                                                                                               error=error))
